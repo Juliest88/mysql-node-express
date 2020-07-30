@@ -26,7 +26,7 @@ class UserModel {
         return result;
     }
 
-    addUser = async (name = '', age = 0, email = '') => {
+    createUser = async (name = '', age = 0, email = '') => {
         const sql = `INSERT INTO ${this.tableName}
         (name, age, email) VALUES (?,?,?)`;
 

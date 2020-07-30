@@ -53,13 +53,13 @@ class UserController {
         res.send(user);
     });
 
-    addUser = awaitHandlerFactory(async (req, res, next) => {
+    createUser = awaitHandlerFactory(async (req, res, next) => {
         const errors = validationResult(req)
         if (!errors.isEmpty()) {
             throw new HttpException(400, 'Validation faild', errors);
         }
 
-        const result = await UserModel.addUser(req.body.name, req.body.age, req.body.email);
+        const result = await UserModel.createUser(req.body.name, req.body.age, req.body.email);
 
         if (!result) {
             throw new HttpException(500, 'Something went wrong');
