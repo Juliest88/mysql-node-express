@@ -67,6 +67,14 @@ class UserController {
 
         res.send('User was created!');
     });
+
+    updateUser = awaitHandlerFactory(async (req, res, next) => {
+
+        const result = await UserModel.updateUser(req.body.name, req.body.age, req.body.email);
+
+
+        // res.send('User was updated!');
+    });
 }
 
 
