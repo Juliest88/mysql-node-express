@@ -7,7 +7,7 @@ const { check, validationResult } = require('express-validator');
  *                                     User Controller
  ******************************************************************************/
 class UserController {
-    checkUserValidation = [
+    checkUserSchema = [
         check('name')
             .isAlpha()
             .withMessage('Must be only alphabetical chars')
