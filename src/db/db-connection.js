@@ -38,7 +38,7 @@ class DBConnection {
         return new Promise((resolve, reject) => {
             const callback = (error, result) => {
                 if (error) {
-                    reject(connectionError);
+                    reject(error);
                     return;
                 }
                 resolve(result);

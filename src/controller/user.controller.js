@@ -1,11 +1,18 @@
 const UserModel = require('../models/user.model');
 const HttpException = require('../utils/HttpException.utils');
 const awaitHandlerFactory = require('../middleware/awaitHandlerFactory.middleware');
+const { check, validationResult } = require('express-validator');
 
 /******************************************************************************
  *                                     User Controller
  ******************************************************************************/
 class UserController {
+    checkUserValidation = [
+        check('name').isAlpha().isLength({ min: 3 }),
+        check('email').isEmail(),
+        check('age').optional().isNumeric()
+    ];
+
     getAllUsers = awaitHandlerFactory(async (req, res, next) => {
         const userList = await UserModel.getAllUsers();
         if (!userList.length) {
@@ -25,17 +32,9 @@ class UserController {
     });
 
     addUser = awaitHandlerFactory(async (req, res, next) => {
-        if (!req.body.name || !req.body.email) {
-            const errors = {}
-
-            if (!req.body.name) {
-                errors['name'] = 'name field is required';
-            }
-            if (!req.body.email) {
-                errors['email'] = 'email field is required';
-            }
-
-            throw new HttpException(400, 'Missing required fields', errors);
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) {
+            throw new HttpException(400, 'Missing required fields', errors.array());
         }
 
         const result = await UserModel.addUser(req.body.name, req.body.age, req.body.email);
