@@ -2,14 +2,19 @@ const HttpException = require('../utils/HttpException.utils');
 
 
 function errorMiddleware(error, req, res, next) {
-    let { status = 500, message } = error;
-    console.error('[ERROR] ', status, message);
+    let { status = 500, message, data } = error;
 
-    res.status(status).send({
+    console.error('[ERROR] ', status, message, data);
+
+    error = {
         type: 'error',
         status,
         message
-    });
+    }
+
+    if (data) error['data'] = data;
+
+    res.status(status).send(error);
 }
 
 module.exports = errorMiddleware;

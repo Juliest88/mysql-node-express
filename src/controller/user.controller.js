@@ -23,6 +23,25 @@ class UserController {
 
         res.send(user);
     });
+
+    addUser = awaitHandlerFactory(async (req, res, next) => {
+        if (!req.body.name || !req.body.email) {
+            const errors = {}
+
+            if (!req.body.name) {
+                errors['name'] = 'name field is required';
+            }
+            if (!req.body.email) {
+                errors['email'] = 'email field is required';
+            }
+
+            throw new HttpException(400, 'Missing required fields', errors);
+        }
+
+        const result = await UserModel.addUser(req.body.name, req.body.age, req.body.email);
+
+        res.send(result);
+    });
 }
 
 
