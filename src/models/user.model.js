@@ -19,9 +19,8 @@ class UserModel {
     }
 
     addUser = async (name = '', age = 0, email = '') => {
-        console.log(age);
         const sql = `INSERT INTO ${this.tableName}
-        (name, age, email) VALUS (?,?,?)`;
+        (name, age, email) VALUES (?,?,?)`;
 
         const result = await query(sql, [name, age, email]);
 
