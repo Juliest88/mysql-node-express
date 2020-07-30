@@ -4,15 +4,16 @@ const HttpException = require('../utils/HttpException.utils');
 function errorMiddleware(error, req, res, next) {
     let { status = 500, message, data } = error;
 
-    console.error('[ERROR] ', status, message, data);
+    console.error('[ERROR] ', status, message, data ? data : '');
+
+    if (status === 500 || !message) message = 'Internal server error';
 
     error = {
         type: 'error',
         status,
-        message
+        message,
+        ...(data) && data
     }
-
-    if (data) error['data'] = data;
 
     res.status(status).send(error);
 }

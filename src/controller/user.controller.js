@@ -8,9 +8,18 @@ const { check, validationResult } = require('express-validator');
  ******************************************************************************/
 class UserController {
     checkUserValidation = [
-        check('name').isAlpha().isLength({ min: 3 }),
-        check('email').isEmail(),
-        check('age').optional().isNumeric()
+        check('name')
+            .isAlpha()
+            .withMessage('Must be only alphabetical chars')
+            .isLength({ min: 3 })
+            .withMessage('Must be at least 3 chars long'),
+        check('email')
+            .isEmail()
+            .withMessage('Must be a valid email'),
+        check('age')
+            .optional()
+            .isNumeric()
+            .withMessage('Must be a number')
     ];
 
     getAllUsers = awaitHandlerFactory(async (req, res, next) => {
@@ -34,12 +43,16 @@ class UserController {
     addUser = awaitHandlerFactory(async (req, res, next) => {
         const errors = validationResult(req)
         if (!errors.isEmpty()) {
-            throw new HttpException(400, 'Missing required fields', errors.array());
+            throw new HttpException(400, 'Missing required fields', errors);
         }
 
         const result = await UserModel.addUser(req.body.name, req.body.age, req.body.email);
 
-        res.send(result);
+        if (!result) {
+            throw new HttpException(500, 'Something went wrong');
+        }
+
+        res.send('User was created!');
     });
 }
 

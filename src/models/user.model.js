@@ -23,8 +23,9 @@ class UserModel {
         (name, age, email) VALUES (?,?,?)`;
 
         const result = await query(sql, [name, age, email]);
+        const affectedRows = result ? result.affectedRows : 0;
 
-        return result;
+        return affectedRows;
     }
 }
 
