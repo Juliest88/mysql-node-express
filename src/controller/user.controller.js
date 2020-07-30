@@ -9,11 +9,15 @@ const { check, validationResult } = require('express-validator');
 class UserController {
     checkUserSchema = [
         check('name')
+            .exists()
+            .withMessage('Required field')
             .isAlpha()
             .withMessage('Must be only alphabetical chars')
             .isLength({ min: 3 })
             .withMessage('Must be at least 3 chars long'),
         check('email')
+            .exists()
+            .withMessage('Required field')
             .isEmail()
             .withMessage('Must be a valid email'),
         check('age')
@@ -43,7 +47,7 @@ class UserController {
     addUser = awaitHandlerFactory(async (req, res, next) => {
         const errors = validationResult(req)
         if (!errors.isEmpty()) {
-            throw new HttpException(400, 'Missing required fields', errors);
+            throw new HttpException(400, 'Validation faild', errors);
         }
 
         const result = await UserModel.addUser(req.body.name, req.body.age, req.body.email);
