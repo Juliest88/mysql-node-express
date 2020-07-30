@@ -10,6 +10,14 @@ class UserModel {
         return result;
     }
 
+    getUserById = async (id) => {
+        const sql = `SELECT * FROM ${this.tableName}
+        WHERE id = ?`;
+        const result = await query(sql, [id]);
+
+        return result;
+    }
+
     getUserByName = async (name) => {
         const sql = `SELECT * FROM ${this.tableName}
         WHERE name = ?`;

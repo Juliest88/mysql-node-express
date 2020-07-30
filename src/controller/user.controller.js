@@ -35,6 +35,15 @@ class UserController {
         res.send(userList);
     });
 
+    getUserById = awaitHandlerFactory(async (req, res, next) => {
+        const user = await UserModel.getUserById(req.params.id);
+        if (!user.length) {
+            throw new HttpException(404, 'User not found');
+        }
+
+        res.send(user);
+    });
+
     getUserByName = awaitHandlerFactory(async (req, res, next) => {
         const user = await UserModel.getUserByName(req.params.name);
         if (!user.length) {
