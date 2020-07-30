@@ -69,6 +69,13 @@ class UserController {
     });
 
     updateUser = awaitHandlerFactory(async (req, res, next) => {
+        const update = Object.keys(req.body);
+        const allowUpdates = ['name', 'email', 'age'];
+        const isValidOperation = updates.every(update => allowUpdates.includes(update));
+
+        if (!isValidOperation) {
+            throw new HttpException(400, 'Invalid updates!');
+        }
 
         const result = await UserModel.updateUser(req.body.name, req.body.age, req.body.email);
 
