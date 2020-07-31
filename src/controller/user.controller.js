@@ -7,7 +7,7 @@ const { check, validationResult } = require('express-validator');
  *                                     User Controller
  ******************************************************************************/
 class UserController {
-    checkUserSchema = [
+    createUserSchema = [
         check('name')
             .exists()
             .withMessage('Required field')
@@ -24,6 +24,24 @@ class UserController {
             .optional()
             .isNumeric()
             .withMessage('Must be a number')
+    ];
+
+    updateUserSchema = [
+        check('name')
+            .optional()
+            .isAlpha()
+            .withMessage('Must be only alphabetical chars')
+            .isLength({ min: 3 })
+            .withMessage('Must be at least 3 chars long'),
+        check('email')
+            .optional()
+            .isEmail()
+            .withMessage('Must be a valid email'),
+        check('age')
+            .optional()
+            .isNumeric()
+            .withMessage('Must be a number')
+
     ];
 
     getAllUsers = awaitHandlerFactory(async (req, res, next) => {
@@ -70,6 +88,11 @@ class UserController {
 
     updateUser = awaitHandlerFactory(async (req, res, next) => {
         const updates = Object.keys(req.body);
+
+        if (!updates.length) {
+            throw new HttpException(400, 'Please provide required field');
+        }
+
         const allowUpdates = ['name', 'email', 'age'];
         const isValidOperation = updates.every(update => allowUpdates.includes(update));
 
@@ -87,7 +110,7 @@ class UserController {
 
         const message = affectedRows && changedRows ? 'User updated successfully' : 'Updated faild'
 
-        res.send({message, info});
+        res.send({ message, info });
     });
 }
 

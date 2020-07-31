@@ -1,5 +1,5 @@
 const query = require('../db/db-connection');
-const { getPlaceholderStringForArray } = require('../utils/common.utils');
+const { multipleCoulmnSet, getPlaceholderStringForArray } = require('../utils/common.utils');
 class UserModel {
     tableName = 'user';
 
@@ -37,11 +37,13 @@ class UserModel {
     }
 
     updateUser = async (body, id) => {
-        const sql = 'UPDATE user SET age = ? WHERE id = ?';
+        const { setColumnsPartialQuery, values } = multipleCoulmnSet(body)
+        const sql = `UPDATE user SET ${setColumnsPartialQuery} WHERE id = ?`;
 
-        const result = await query(sql, [body.age, id]);
+        const result = await query(sql, [...values, id]);
 
         return result;
+
     }
 }
 
