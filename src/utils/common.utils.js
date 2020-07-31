@@ -12,10 +12,10 @@ exports.multipleColumnSet = (object) => {
     const keys = Object.keys(object);
     const values = Object.values(object);
 
-    setColumnsPartialQuery = keys.map(key => `${key} = ?`).join(', ');
+    updateSet = keys.map(key => `${key} = ?`).join(', ');
 
     return {
-        setColumnsPartialQuery,
+        updateSet,
         values
     }
 }

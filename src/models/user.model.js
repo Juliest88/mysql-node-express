@@ -37,8 +37,8 @@ class UserModel {
     }
 
     updateUser = async (body, id) => {
-        const { setColumnsPartialQuery, values } = multipleColumnSet(body)
-        const sql = `UPDATE user SET ${setColumnsPartialQuery} WHERE id = ?`;
+        const { updateSet, values } = multipleColumnSet(body)
+        const sql = `UPDATE user SET ${updateSet} WHERE id = ?`;
 
         const result = await query(sql, [...values, id]);
 

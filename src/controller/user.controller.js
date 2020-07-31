@@ -108,7 +108,8 @@ class UserController {
 
         const { affectedRows, changedRows, info } = result;
 
-        const message = affectedRows && changedRows ? 'User updated successfully' : 'Updated faild'
+        const message = !affectedRows ? 'User not found' :
+            affectedRows && changedRows ? 'User updated successfully' : 'Updated faild';
 
         res.send({ message, info });
     });
