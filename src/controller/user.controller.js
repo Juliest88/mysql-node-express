@@ -72,10 +72,7 @@ class UserController {
     });
 
     createUser = awaitHandlerFactory(async (req, res, next) => {
-        const errors = validationResult(req)
-        if (!errors.isEmpty()) {
-            throw new HttpException(400, 'Validation faild', errors);
-        }
+        this.checkValidation(req);
 
         const result = await UserModel.createUser(req.body.name, req.body.age, req.body.email);
 
@@ -87,10 +84,12 @@ class UserController {
     });
 
     updateUser = awaitHandlerFactory(async (req, res, next) => {
+        this.checkValidation(req);
+
         const updates = Object.keys(req.body);
 
         if (!updates.length) {
-            throw new HttpException(400, 'Please provide required field');
+            throw new HttpException(400, 'Please provide required field to update');
         }
 
         const allowUpdates = ['name', 'email', 'age'];
@@ -113,6 +112,13 @@ class UserController {
 
         res.send({ message, info });
     });
+
+    checkValidation = (req) => {
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) {
+            throw new HttpException(400, 'Validation faild', errors);
+        }
+    }
 }
 
 

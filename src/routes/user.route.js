@@ -8,6 +8,6 @@ router.get('/:id', userController.getUserById); // localhost:3000/user/1
 router.get('/:name', userController.getUserByName); // localhost:3000/user/julia
 router.post('/', userController.createUserSchema, userController.createUser);
 // using patch for partial update
-router.patch('/:id', userController.updateUser);
+router.patch('/:id', userController.updateUserSchema, userController.updateUser);
 
 module.exports = router;
