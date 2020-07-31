@@ -3,7 +3,6 @@ const HttpException = require('../utils/HttpException.utils');
 
 function errorMiddleware(error, req, res, next) {
     let { status = 500, message, data } = error;
-
     // SQL error will change the status code (default is 500)
     status = error.code === 'ER_TRUNCATED_WRONG_VALUE_FOR_FIELD' ? 400 : status;
 

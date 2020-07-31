@@ -8,7 +8,7 @@ exports.getPlaceholderStringForArray = (arr) => {
 }
 
 
-exports.multipleCoulmnSet = (object) => {
+exports.multipleColumnSet = (object) => {
     const keys = Object.keys(object);
     const values = Object.values(object);
 
