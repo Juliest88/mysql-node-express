@@ -41,7 +41,6 @@ class UserController {
             .optional()
             .isNumeric()
             .withMessage('Must be a number')
-
     ];
 
     getAllUsers = awaitHandlerFactory(async (req, res, next) => {
@@ -88,10 +87,12 @@ class UserController {
 
         const updates = Object.keys(req.body);
 
+        // If there are not fields to update
         if (!updates.length) {
             throw new HttpException(400, 'Please provide required field to update');
         }
 
+        // Check if the fields are allowed to be updated.
         const allowUpdates = ['name', 'email', 'age'];
         const isValidOperation = updates.every(update => allowUpdates.includes(update));
 
@@ -99,6 +100,7 @@ class UserController {
             throw new HttpException(400, 'Invalid updates!');
         }
 
+        // do the update query and get the result
         const result = await UserModel.updateUser(req.body, req.params.id);
 
         if (!result) {
