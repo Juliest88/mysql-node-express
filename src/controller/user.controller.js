@@ -69,7 +69,7 @@ class UserController {
     });
 
     updateUser = awaitHandlerFactory(async (req, res, next) => {
-        const update = Object.keys(req.body);
+        const updates = Object.keys(req.body);
         const allowUpdates = ['name', 'email', 'age'];
         const isValidOperation = updates.every(update => allowUpdates.includes(update));
 
@@ -77,10 +77,17 @@ class UserController {
             throw new HttpException(400, 'Invalid updates!');
         }
 
-        const result = await UserModel.updateUser(req.body.name, req.body.age, req.body.email);
+        const result = await UserModel.updateUser(req.body, req.params.id);
 
+        if (!result) {
+            throw new HttpException(404, 'Something went wrong');
+        }
 
-        // res.send('User was updated!');
+        const { affectedRows, changedRows, info } = result;
+
+        const message = affectedRows && changedRows ? 'User updated successfully' : 'Updated faild'
+
+        res.send({message, info});
     });
 }
 

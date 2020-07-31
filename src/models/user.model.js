@@ -35,6 +35,14 @@ class UserModel {
 
         return affectedRows;
     }
+
+    updateUser = async (body, id) => {
+        const sql = 'UPDATE user SET age = ? WHERE id = ?';
+
+        const result = await query(sql, [body.age, id]);
+
+        return result;
+    }
 }
 
 module.exports = new UserModel;
