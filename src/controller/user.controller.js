@@ -87,25 +87,23 @@ class UserController {
         const { email, password } = req.body;
 
         const user = await UserModel.findOne({ email });
-        const errorMsg = 'Unable to login!';
 
         if (!user) {
-            throw new HttpException(401, errorMsg);
+            throw new HttpException(401, 'Unable to login!');
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
-            throw new HttpException(401, errorMsg);
+            throw new HttpException(401, 'Incorrect password!');
         }
 
         // user matched!
         const secretKey = process.env.SECRET_JWT || "";
-        const token = jwt.sign({ _id: user.id.toString() }, secretKey, {
+        const token = jwt.sign({ user_id: user.id.toString() }, secretKey, {
             expiresIn: '24h'
         });
 
-        res.cookie('login_token', token);
         res.send({ user, token });
     });
 
