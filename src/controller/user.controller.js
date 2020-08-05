@@ -17,6 +17,11 @@ class UserController {
             throw new HttpException(404, 'Users not found');
         }
 
+        users = users.map(user => {
+            const { password, ...userWithoutPassword } = user;
+            return userWithoutPassword;
+        })
+
         res.send(userList);
     });
 
@@ -26,7 +31,9 @@ class UserController {
             throw new HttpException(404, 'User not found');
         }
 
-        res.send(user);
+        const { password, ...userWithoutPassword } = user;
+
+        res.send(userWithoutPassword);
     });
 
     getUserByuserName = awaitHandlerFactory(async (req, res, next) => {
@@ -35,7 +42,9 @@ class UserController {
             throw new HttpException(404, 'User not found');
         }
 
-        res.send(user);
+        const { password, ...userWithoutPassword } = user;
+
+        res.send(userWithoutPassword);
     });
 
     createUser = awaitHandlerFactory(async (req, res, next) => {
@@ -84,7 +93,7 @@ class UserController {
     userLogin = awaitHandlerFactory(async (req, res, next) => {
         this.checkValidation(req);
 
-        const { email, password } = req.body;
+        const { email, password: pass } = req.body;
 
         const user = await UserModel.findOne({ email });
 
@@ -92,7 +101,7 @@ class UserController {
             throw new HttpException(401, 'Unable to login!');
         }
 
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(pass, user.password);
 
         if (!isMatch) {
             throw new HttpException(401, 'Incorrect password!');
@@ -104,12 +113,9 @@ class UserController {
             expiresIn: '24h'
         });
 
-        res.send({ user, token });
-    });
+        const { password, ...userWithoutPassword } = user;
 
-    userLogout = awaitHandlerFactory(async (req, res, next) => {
-        res.clearCookie('login_token');
-        res.send('Thank you!');
+        res.send({ ...userWithoutPassword, token });
     });
 
     checkValidation = (req) => {

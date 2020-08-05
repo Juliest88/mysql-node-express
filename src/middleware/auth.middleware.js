@@ -5,7 +5,6 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const authenticateJWT = awaitHandlerFactory(async (req, res, next) => {
-    console.log('hi');
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
