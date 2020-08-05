@@ -105,12 +105,12 @@ class UserController {
             expiresIn: '24h'
         });
 
-        res.cookie('token', token);
+        res.cookie('login_token', token);
         res.send({ user, token });
     });
 
     userLogout = awaitHandlerFactory(async (req, res, next) => {
-        res.clearCookie('token');
+        res.clearCookie('login_token');
         res.send('Thank you!');
     });
 
