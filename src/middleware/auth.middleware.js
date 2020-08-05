@@ -15,9 +15,9 @@ const authenticateJWT = awaitHandlerFactory(async (req, res, next) => {
     const token = authHeader.split(' ')[1];
     const secretKey = process.env.SECRET_JWT || "";
 
-    const decoded = jwt.verify(token, secretKey);
+    const user = jwt.verify(token, secretKey);
 
-    console.log(decoded);
+    req.user = user;
     next();
 });
 
