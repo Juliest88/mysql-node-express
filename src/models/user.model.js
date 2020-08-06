@@ -5,17 +5,15 @@ class UserModel {
 
     find = async (params = {}) => {
         let sql = `SELECT * FROM ${this.tableName}`;
-        let result;
-        if (Object.keys(params).length) {
-            const { columnSet, values } = multipleColumnSet(params)
-            sql += ` WHERE ${columnSet}`;
 
-            result = await query(sql, [...values]);
-        } else {
-            result = await query(sql);
+        if (!Object.keys(params).length) {
+            return await query(sql);
         }
 
-        return result;
+        const { columnSet, values } = multipleColumnSet(params)
+        sql += ` WHERE ${columnSet}`;
+
+        return await query(sql, [...values]);
     }
 
     findOne = async (params) => {
@@ -30,17 +28,17 @@ class UserModel {
         return result[0];
     }
 
-    createUser = async ({ username, password, first_name, last_name, email, age }) => {
+    create = async ({ username, password, first_name, last_name, email, role = 'superuser', age }) => {
         const sql = `INSERT INTO ${this.tableName}
-        (username, password, first_name, last_name, email, age) VALUES (?,?,?,?,?,?)`;
+        (username, password, first_name, last_name, email, role, age) VALUES (?,?,?,?,?,?,?)`;
 
-        const result = await query(sql, [username, password, first_name, last_name, email, age]);
+        const result = await query(sql, [username, password, first_name, last_name, email, role, age]);
         const affectedRows = result ? result.affectedRows : 0;
 
         return affectedRows;
     }
 
-    updateUser = async (params, id) => {
+    update = async (params, id) => {
         const { columnSet, values } = multipleColumnSet(params)
 
         const sql = `UPDATE user SET ${columnSet} WHERE id = ?`;
@@ -50,7 +48,7 @@ class UserModel {
         return result;
     }
 
-    deleteUser = async (id) => {
+    delete = async (id) => {
         const sql = `DELETE FROM ${this.tableName}
         WHERE id = ?`;
         const result = await query(sql, [id]);

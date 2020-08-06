@@ -27,6 +27,10 @@ exports.createUserSchema = [
         .isEmail()
         .withMessage('Must be a valid email')
         .normalizeEmail(),
+    check('role')
+        .optional()
+        .isIn(['admin', 'superuser'])
+        .withMessage('Invalid Role type'),
     check('password')
         .exists()
         .withMessage('Password is required')
@@ -35,9 +39,10 @@ exports.createUserSchema = [
         .withMessage('Password must contain at least 6 characters')
         .isLength({ max: 10 })
         .withMessage('Password can contain max 10 characters'),
-    check('password_confirmation')
+    check('confirm_password')
+        .exists()
         .custom((value, { req }) => value === req.body.password)
-        .withMessage('password_confirmation field must have the same value as the password field'),
+        .withMessage('confirm_password field must have the same value as the password field'),
     check('age')
         .optional()
         .isNumeric()
@@ -66,6 +71,10 @@ exports.updateUserSchema = [
         .isEmail()
         .withMessage('Must be a valid email')
         .normalizeEmail(),
+    check('role')
+        .optional()
+        .isIn(['admin', 'superuser'])
+        .withMessage('Invalid Role type'),
     check('password')
         .optional()
         .notEmpty()
@@ -73,22 +82,24 @@ exports.updateUserSchema = [
         .withMessage('Password must contain at least 6 characters')
         .isLength({ max: 10 })
         .withMessage('Password can contain max 10 characters')
-        .custom((value, { req }) => req.body.password_confirmation === req.body.password)
-        .withMessage('password_confirmation field must have the same value as the password field'),
+        .custom((value, { req }) => !!req.body.confirm_password)
+        .withMessage('Please confirm your password'),
+    check('confirm_password')
+        .optional()
+        .custom((value, { req }) => value === req.body.password)
+        .withMessage('confirm_password field must have the same value as the password field'),
     check('age')
         .optional()
         .isNumeric()
         .withMessage('Must be a number'),
     body()
         .custom(value => {
-            // remove it because we won't use it in the query level
-            delete value['password_confirmation'];
             return !!Object.keys(value).length;
         })
         .withMessage('Please provide required field to update')
         .custom(value => {
             const updates = Object.keys(value);
-            const allowUpdates = ['username', 'password', 'email', 'first_name', 'last_name', 'age'];
+            const allowUpdates = ['username', 'password', 'confirm_password', 'email', 'role', 'first_name', 'last_name', 'age'];
             return updates.every(update => allowUpdates.includes(update));
         })
         .withMessage('Invalid updates!')

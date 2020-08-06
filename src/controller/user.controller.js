@@ -20,7 +20,7 @@ class UserController {
         userList = userList.map(user => {
             const { password, ...userWithoutPassword } = user;
             return userWithoutPassword;
-        })
+        });
 
         res.send(userList);
     });
@@ -52,7 +52,7 @@ class UserController {
 
         await this.processPreSave(req);
 
-        const result = await UserModel.createUser(req.body);
+        const result = await UserModel.create(req.body);
 
         if (!result) {
             throw new HttpException(500, 'Something went wrong');
@@ -66,9 +66,11 @@ class UserController {
 
         await this.processPreSave(req);
 
+        const { confirm_password, ...restOfUpdates } = req.body;
+
         // do the update query and get the result
         // it can be partial edit
-        const result = await UserModel.updateUser(req.body, req.params.id);
+        const result = await UserModel.update(restOfUpdates, req.params.id);
 
         if (!result) {
             throw new HttpException(404, 'Something went wrong');
@@ -83,7 +85,7 @@ class UserController {
     });
 
     deleteUser = awaitHandlerFactory(async (req, res, next) => {
-        const result = await UserModel.deleteUser(req.params.id);
+        const result = await UserModel.delete(req.params.id);
         if (!result) {
             throw new HttpException(404, 'User not found');
         }
