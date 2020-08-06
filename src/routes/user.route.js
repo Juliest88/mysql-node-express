@@ -15,6 +15,5 @@ router.delete('/id/:id', userController.deleteUser); // localhost:3000/api/v1/us
 
 
 router.post('/login', validateLogin, userController.userLogin); // localhost:3000/api/v1/users/login
-router.post('/logout', userController.userLogout); // localhost:3000/api/v1/users/logout
 
 module.exports = router;

@@ -26,7 +26,7 @@ class UserController {
     });
 
     getUserById = awaitHandlerFactory(async (req, res, next) => {
-        const user = await UserModel.getUserById(req.params.id);
+        const user = await UserModel.findOne({ id: req.params.id });
         if (!user) {
             throw new HttpException(404, 'User not found');
         }
@@ -37,7 +37,7 @@ class UserController {
     });
 
     getUserByuserName = awaitHandlerFactory(async (req, res, next) => {
-        const user = await UserModel.getUserByuserName(req.params.username);
+        const user = await UserModel.findOne({ username: req.params.username });
         if (!user) {
             throw new HttpException(404, 'User not found');
         }

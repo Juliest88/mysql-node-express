@@ -10,22 +10,6 @@ class UserModel {
         return result;
     }
 
-    getUserById = async (id) => {
-        const sql = `SELECT * FROM ${this.tableName}
-        WHERE id = ?`;
-        const result = await query(sql, [id]);
-
-        return result[0];
-    }
-
-    getUserByuserName = async (username) => {
-        const sql = `SELECT * FROM ${this.tableName}
-        WHERE username = ?`;
-        const result = await query(sql, [username]);
-
-        return result[0];
-    }
-
     findOne = async (params) => {
         const { columnSet, values } = multipleColumnSet(params)
 
