@@ -3,9 +3,17 @@ const { multipleColumnSet, getPlaceholderStringForArray } = require('../utils/co
 class UserModel {
     tableName = 'user';
 
-    getAllUsers = async () => {
-        const sql = `SELECT * FROM ${this.tableName}`;
-        const result = await query(sql);
+    find = async (params = {}) => {
+        let sql = `SELECT * FROM ${this.tableName}`;
+        let result;
+        if (Object.keys(params).length) {
+            const { columnSet, values } = multipleColumnSet(params)
+            sql += ` WHERE ${columnSet}`;
+
+            result = await query(sql, [...values]);
+        } else {
+            result = await query(sql);
+        }
 
         return result;
     }
