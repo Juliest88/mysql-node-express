@@ -8,7 +8,7 @@ const authenticateJWT = awaitHandlerFactory(async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
-        throw new HttpException(401, 'No credentials sent!');
+        throw new HttpException(401, 'Access denied. No credentials sent!');
     }
 
     const token = authHeader.split(' ')[1];

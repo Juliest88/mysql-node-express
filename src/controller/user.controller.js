@@ -50,7 +50,7 @@ class UserController {
     createUser = awaitHandlerFactory(async (req, res, next) => {
         this.checkValidation(req);
 
-        await this.processPreSave(req);
+        await this.hashPassword(req);
 
         const result = await UserModel.create(req.body);
 
@@ -64,7 +64,7 @@ class UserController {
     updateUser = awaitHandlerFactory(async (req, res, next) => {
         this.checkValidation(req);
 
-        await this.processPreSave(req);
+        await this.hashPassword(req);
 
         const { confirm_password, ...restOfUpdates } = req.body;
 
@@ -89,7 +89,7 @@ class UserController {
         if (!result) {
             throw new HttpException(404, 'User not found');
         }
-        res.send('User was deleted!');
+        res.send('User has been deleted');
     });
 
     userLogin = awaitHandlerFactory(async (req, res, next) => {
@@ -127,7 +127,8 @@ class UserController {
         }
     }
 
-    processPreSave = async (req) => {
+    // hash password if it exists
+    hashPassword = async (req) => {
         if (req.body.password) {
             req.body.password = await bcrypt.hash(req.body.password, 8);
         }
