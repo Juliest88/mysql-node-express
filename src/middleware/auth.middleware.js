@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const authenticateJWT = awaitHandlerFactory(async (req, res, next) => {
+const auth = awaitHandlerFactory(async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
@@ -21,4 +21,4 @@ const authenticateJWT = awaitHandlerFactory(async (req, res, next) => {
     next();
 });
 
-module.exports = authenticateJWT;
+module.exports = auth;
