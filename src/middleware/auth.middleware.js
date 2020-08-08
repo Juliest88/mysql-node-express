@@ -31,7 +31,7 @@ const auth = (ownerPermission = false, ...roles) => {
             }
 
             // if the user have permissions
-            req.user = user;
+            req.currentUser = user;
             next();
 
         } catch (e) {
