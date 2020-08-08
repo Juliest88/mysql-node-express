@@ -27,17 +27,6 @@ dotenv.config();
 //     }
 // };
 
-
-// const hasRole = (...roles) => {
-//     return function (req, res, next) {
-//         if (roles.length && !roles.includes(req.user.role)) {
-//             throw new HttpException(401, 'Unauthorized');
-//         }
-
-//         next();
-//     }
-// }
-
 const auth = (...roles) => {
     return async function (req, res, next) {
         try {
