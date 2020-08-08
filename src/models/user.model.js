@@ -1,5 +1,6 @@
 const query = require('../db/db-connection');
 const { multipleColumnSet, getPlaceholderStringForArray } = require('../utils/common.utils');
+const Role = require('../utils/role');
 class UserModel {
     tableName = 'user';
 
@@ -28,7 +29,7 @@ class UserModel {
         return result[0];
     }
 
-    create = async ({ username, password, first_name, last_name, email, role = 'superuser', age }) => {
+    create = async ({ username, password, first_name, last_name, email, role = Role.SuperUser, age }) => {
         const sql = `INSERT INTO ${this.tableName}
         (username, password, first_name, last_name, email, role, age) VALUES (?,?,?,?,?,?,?)`;
 

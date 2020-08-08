@@ -1,4 +1,5 @@
 const HttpException = require('../utils/HttpException.utils');
+const UserModel = require('../models/user.model');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
@@ -15,8 +16,8 @@ const auth = async (req, res, next) => {
         const secretKey = process.env.SECRET_JWT || "";
 
         // Verify Toekn
-        const user = jwt.verify(token, secretKey);
-        console.log(user);
+        const decoded = jwt.verify(token, secretKey);
+        const user = await UserModel.findOne({ id: decoded.user_id });
 
         req.user = user;
         next();
