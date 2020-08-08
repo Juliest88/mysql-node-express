@@ -43,6 +43,7 @@ const auth = (...roles) => {
             const decoded = jwt.verify(token, secretKey);
             const user = await UserModel.findOne({ id: decoded.user_id });
 
+            // check if this user has premission to this route (only if we added roles to this route)
             if (roles.length && !roles.includes(user.role)) {
                 throw new HttpException(401, 'Unauthorized');
             }
