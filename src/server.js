@@ -4,7 +4,6 @@ const cors = require("cors");
 const HttpException = require('./utils/HttpException.utils');
 const errorMiddleware = require('./middleware/error.middleware');
 const userRouter = require('./routes/user.route');
-cookieParser = require('cookie-parser');
 
 // Init express
 const app = express();
@@ -15,7 +14,6 @@ dotenv.config();
 app.use(express.json());
 // enabling cors for all requests by using cors middleware
 app.use(cors());
-app.use(cookieParser());
 // Enable pre-flight
 app.options("*", cors());
 
