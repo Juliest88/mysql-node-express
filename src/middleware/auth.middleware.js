@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const auth = (...roles) => {
+const auth = (ownerPermission = false, ...roles) => {
     return async function (req, res, next) {
         try {
             const authHeader = req.headers.authorization;
@@ -20,11 +20,15 @@ const auth = (...roles) => {
             const decoded = jwt.verify(token, secretKey);
             const user = await UserModel.findOne({ id: decoded.user_id });
 
-            // check if this user has premission to this route (only if we added roles to this route)
-            if (roles.length && !roles.includes(user.role)) {
+            const ownerAuthorize = ownerPermission && req.params.id == user.id;
+
+            // check if the owner user don't have the permission to do this action
+            // and check if the user role have the permission to do this action.
+            if (!ownerAuthorize && roles.length && !roles.includes(user.role)) {
                 throw new HttpException(401, 'Unauthorized');
             }
 
+            // if the user have permissions
             req.user = user;
             next();
 
