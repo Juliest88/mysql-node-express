@@ -20,10 +20,12 @@ const auth = (ownerPermission = false, ...roles) => {
             const decoded = jwt.verify(token, secretKey);
             const user = await UserModel.findOne({ id: decoded.user_id });
 
+            // check if the owner user have the permission for this route.
             const ownerAuthorized = ownerPermission && req.params.id == user.id;
 
-            // check if the owner user don't have the permission to do this action
-            // and check if the user role have the permission to do this action.
+            // if the owner user don't have permissions and
+            // if the user role don't have the permission to do this action.
+            // he will get this error
             if (!ownerAuthorized && roles.length && !roles.includes(user.role)) {
                 throw new HttpException(401, 'Unauthorized');
             }
