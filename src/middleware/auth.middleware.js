@@ -20,6 +20,10 @@ const auth = (...roles) => {
             const decoded = jwt.verify(token, secretKey);
             const user = await UserModel.findOne({ id: decoded.user_id });
 
+            if (!user) {
+                throw new HttpException(401, 'Access denied. User Not Found!');
+            }
+
             // check if the current user is the owner user
             const ownerAuthorized = req.params.id == user.id;
 
