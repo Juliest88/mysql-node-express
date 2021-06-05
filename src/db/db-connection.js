@@ -25,25 +25,28 @@ class DBConnection {
                 }
                 if (err.code === 'ECONNREFUSED') {
                     console.error('Database connection was refused.');
+                } else {
+                    console.error('Database Error: ' + JSON.stringify(err))
                 }
             }
             if (connection) {
+                console.info(`Connected to ${process.env.DB_DATABASE} Database`);
                 connection.release();
             }
             return
         });
     }
 
-    query = async (sql, values) => {
+    query = async(sql, values) => {
         return new Promise((resolve, reject) => {
             const callback = (error, result) => {
-                if (error) {
-                    reject(error);
-                    return;
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(result);
                 }
-                resolve(result);
-            }
-            // execute will internally call prepare and query
+                // execute will internally call prepare and query
             this.db.execute(sql, values, callback);
         }).catch(err => {
             const mysqlErrorList = Object.keys(HttpStatusCodes);
