@@ -7,6 +7,7 @@ const userRouter = require('./routes/user.route');
 
 // Init express
 const app = express();
+app.disable('x-powered-by'); // Disable X-Powered-By header
 // Init environment
 dotenv.config();
 // parse requests of content-type: application/json

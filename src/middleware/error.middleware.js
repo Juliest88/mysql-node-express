@@ -9,8 +9,8 @@ function errorMiddleware(error, req, res, next) {
     error = {
         type: 'error',
         status,
-        message,
-        ...(data) && data
+        message
+        // Removed data to prevent sensitive information leakage
     }
 
     res.status(status).send(error);
@@ -24,4 +24,3 @@ module.exports = errorMiddleware;
     message: 'Not Found'
     data: {...} // optional
 }
-*/
