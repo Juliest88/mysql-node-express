@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require('dotenv');
 const cors = require("cors");
+const helmet = require("helmet"); // Added helmet middleware
 const HttpException = require('./utils/HttpException.utils');
 const errorMiddleware = require('./middleware/error.middleware');
 const userRouter = require('./routes/user.route');
@@ -16,6 +17,8 @@ app.use(express.json());
 app.use(cors());
 // Enable pre-flight
 app.options("*", cors());
+
+app.use(helmet()); // Disable X-Powered-By header
 
 const port = Number(process.env.PORT || 3331);
 
