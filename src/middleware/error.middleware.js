@@ -3,13 +3,13 @@ function errorMiddleware(error, req, res, next) {
 
     console.log(`[Error] ${error}`);
 
-    // If status code is 500 - change the message to Intrnal server error
+    // If status code is 500 - change the message to Internal server error
     message = status === 500 || !message ? 'Internal server error' : message;
 
     error = {
         type: 'error',
         status,
-        message
+        message,
         // Removed data to prevent sensitive information leakage
     }
 
@@ -21,6 +21,6 @@ module.exports = errorMiddleware;
 {
     type: 'error',
     status: 404,
-    message: 'Not Found'
-    data: {...} // optional
+    message: 'Not Found',
 }
+*/

@@ -4,10 +4,11 @@ const cors = require("cors");
 const HttpException = require('./utils/HttpException.utils');
 const errorMiddleware = require('./middleware/error.middleware');
 const userRouter = require('./routes/user.route');
+const helmet = require('helmet'); // Added helmet middleware
 
 // Init express
 const app = express();
-app.disable('x-powered-by'); // Disable X-Powered-By header
+app.use(helmet()); // Use helmet for security headers
 // Init environment
 dotenv.config();
 // parse requests of content-type: application/json
