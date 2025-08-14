@@ -52,6 +52,20 @@ npm start
 npm run dev
 ```
 
+## API Documentation (Swagger)
+
+This project includes interactive API documentation using Swagger UI.
+
+After running the server, open your browser and go to:
+
+```
+http://localhost:3331/api-docs
+```
+
+You will see a full list of all API endpoints, parameters, request/response examples, and you can even test requests directly from the browser.
+
+> **Note:** If you change the server port, update the URL accordingly.
+
 **Enjoy :)**
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)

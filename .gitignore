@@ -1,2 +1,22 @@
+# Dependencies
 node_modules
+
+# Environment variables
 .env
+
+# Logs
+logs/
+*.log
+
+# IDE and Editor files
+.vscode/
+.idea/
+.DS_Store
+
+# Build outputs
+dist/
+build/
+
+# Temporary files
+tmp/
+temp/
