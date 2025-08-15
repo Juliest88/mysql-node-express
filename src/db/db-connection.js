@@ -1,6 +1,6 @@
 const mysql2 = require('mysql2');
 const config = require('../config');
-const logger = require('../utils/logger');
+const logger = require('../utils/logger.utils');
 const { db } = require('../config');
 
 class DBConnection {

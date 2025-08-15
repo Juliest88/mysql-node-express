@@ -1,4 +1,4 @@
-const logger = require('../utils/logger');
+const logger = require('../utils/logger.utils');
 
 function errorMiddleware(error, req, res, next) {
     let { status = 500, message, data } = error;

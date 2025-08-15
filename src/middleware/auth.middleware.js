@@ -1,48 +1,41 @@
-const HttpException = require('../utils/HttpException.utils');
-const UserModel = require('../models/user.model');
-const jwt = require('jsonwebtoken');
-const config = require('../config');
+const jwt = require("jsonwebtoken");
+const config = require("../config");
+const {
+  extractBearer,
+  loadUser,
+  checkPermissions,
+} = require("../utils/auth.utils");
 
+/**
+ * Middleware to check if the user is authenticated and has the required roles
+ * @param  {...any} roles
+ * @returns {function}
+ */
 const auth = (...roles) => {
-    return async function (req, res, next) {
-        try {
-            const authHeader = req.headers.authorization;
-            const bearer = 'Bearer ';
+  return async function (req, res, next) {
+    try {
+      const { secret, algorithm } = config.jwt || {};
+      if (!secret || !algorithm) throw new Error("JWT config missing");
 
-            if (!authHeader || !authHeader.startsWith(bearer)) {
-                throw new HttpException(401, 'Access denied. No credentials sent!');
-            }
+      // Extract the bearer token from the authorization header
+      const authHeader = req.headers.authorization;
+      const token = extractBearer(authHeader);
 
-            const token = authHeader.replace(bearer, '');
-            const { secret } = config.jwt;
+      // Verify the token
+      const decoded = jwt.verify(token, secret, { algorithms: [algorithm] });
+      const user = await loadUser(decoded);
 
-            // Verify Token
-            const decoded = jwt.verify(token, secret);
-            const user = await UserModel.findOne({ id: decoded.user_id });
+      // Check if the user has the required roles
+      checkPermissions(user, req.params.id, roles);
 
-            if (!user) {
-                throw new HttpException(401, 'Authentication failed!');
-            }
-
-            // check if the current user is the owner user
-            const ownerAuthorized = req.params.id == user.id;
-
-            // if the current user is not the owner and
-            // if the user role don't have the permission to do this action.
-            // the user will get this error
-            if (!ownerAuthorized && roles.length && !roles.includes(user.role)) {
-                throw new HttpException(401, 'Unauthorized');
-            }
-
-            // if the user has permissions
-            req.currentUser = user;
-            next();
-
-        } catch (e) {
-            e.status = 401;
-            next(e);
-        }
+      // Set the current user
+      req.currentUser = user;
+      next();
+    } catch (e) {
+      e.status = 401;
+      next(e);
     }
-}
+  };
+};
 
 module.exports = auth;

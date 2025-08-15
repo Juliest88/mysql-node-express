@@ -1,12 +1,15 @@
+// Third-party dependencies
 const express = require("express");
+const swaggerUi = require('swagger-ui-express');
+
+// Internal dependencies
 const applySecurity = require('./middleware/security');
 const router = require('./routes/index');
 const notFound = require('./middleware/notFound.middleware');
 const errorMiddleware = require('./middleware/error.middleware');
-const swaggerUi = require('swagger-ui-express');
 const { swaggerSpec } = require('./config/swagger');
 
-// Init express
+// Init express app
 const app = express();
 
 // parse requests of content-type: application/json
@@ -16,6 +19,7 @@ app.use(express.json());
 // Apply security middleware
 applySecurity(app);
 
+// Main router
 app.use('/api/v1', router);
 
 // Swagger UI
