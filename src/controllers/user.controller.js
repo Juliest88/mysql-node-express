@@ -3,8 +3,7 @@ const HttpException = require('../utils/HttpException.utils');
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
-dotenv.config();
+const config = require('../config');
 
 /******************************************************************************
  *                              User Controller
@@ -115,10 +114,8 @@ class UserController {
         }
 
         // user matched!
-        const secretKey = process.env.SECRET_JWT || "";
-        const token = jwt.sign({ user_id: user.id.toString() }, secretKey, {
-            expiresIn: '24h'
-        });
+        const { secret, expiresIn } = config.jwt;
+        const token = jwt.sign({ user_id: user.id.toString() }, secret, { expiresIn });
 
         const { password, ...userWithoutPassword } = user;
 

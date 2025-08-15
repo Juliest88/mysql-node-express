@@ -1,4 +1,5 @@
 const dotenv = require('dotenv');
+// Init environment variables
 dotenv.config();
 
 module.exports = {
@@ -11,6 +12,6 @@ module.exports = {
   },
   jwt: {
     secret: process.env.SECRET_JWT || '',
-    expiresIn: process.env.JWT_EXPIRES_IN || '1d',
+    expiresIn: process.env.JWT_EXPIRES_IN || '24h',
   },
 };

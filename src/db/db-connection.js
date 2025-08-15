@@ -1,12 +1,11 @@
-const dotenv = require('dotenv');
-dotenv.config();
 const mysql2 = require('mysql2');
 const config = require('../config');
 const logger = require('../utils/logger');
+const { db } = require('../config');
 
 class DBConnection {
     constructor() {
-        this.db = mysql2.createPool(config.db);
+        this.db = mysql2.createPool(db);
 
         this.checkConnection();
     }

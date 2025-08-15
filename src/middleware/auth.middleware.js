@@ -1,8 +1,7 @@
 const HttpException = require('../utils/HttpException.utils');
 const UserModel = require('../models/user.model');
 const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
-dotenv.config();
+const config = require('../config');
 
 const auth = (...roles) => {
     return async function (req, res, next) {
@@ -15,10 +14,10 @@ const auth = (...roles) => {
             }
 
             const token = authHeader.replace(bearer, '');
-            const secretKey = process.env.SECRET_JWT || "";
+            const { secret } = config.jwt;
 
             // Verify Token
-            const decoded = jwt.verify(token, secretKey);
+            const decoded = jwt.verify(token, secret);
             const user = await UserModel.findOne({ id: decoded.user_id });
 
             if (!user) {
