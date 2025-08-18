@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 // Init environment variables
 dotenv.config();
 
@@ -9,11 +9,13 @@ const config = {
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
+    waitForConnections: true,
+    connectionLimit: Number(process.env.DB_CONN_LIMIT || 10),
   },
   jwt: {
-    secret: process.env.SECRET_JWT || '',
-    expiresIn: process.env.JWT_EXPIRES_IN || '24h',
-    algorithm: process.env.JWT_ALGORITHM || 'HS256',
+    secret: process.env.SECRET_JWT || "",
+    expiresIn: process.env.JWT_EXPIRES_IN || "24h",
+    algorithm: process.env.JWT_ALGORITHM || "HS256",
   },
 };
 
