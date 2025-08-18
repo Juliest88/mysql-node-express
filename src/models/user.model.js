@@ -3,10 +3,10 @@ import { multipleColumnSet } from "../utils/common.utils.js";
 import Role from "../utils/userRoles.utils.js";
 
 class UserModel {
-  #tableName = "user";
+  tableName = "user";
 
-  async find(params = {}) {
-    let sql = `SELECT * FROM ${this.#tableName}`;
+  find = async (params = {}) => {
+    let sql = `SELECT * FROM ${this.tableName}`;
 
     if (!Object.keys(params).length) {
       return await dbQuery(sql);
@@ -16,16 +16,16 @@ class UserModel {
     sql += ` WHERE ${columnSet}`;
 
     return await dbQuery(sql, values);
-  }
+  };
 
-  async findOne(params) {
+  findOne = async (params) => {
     const { columnSet, values } = multipleColumnSet(params);
-    const sql = `SELECT * FROM ${this.#tableName} WHERE ${columnSet}`;
+    const sql = `SELECT * FROM ${this.tableName} WHERE ${columnSet}`;
     const [result] = await dbQuery(sql, values);
     return result;
-  }
+  };
 
-  async create({
+  create = async ({
     username,
     password,
     first_name,
@@ -33,9 +33,9 @@ class UserModel {
     email,
     role = Role.SuperUser,
     age = 0,
-  }) {
+  }) => {
     const sql = `
-            INSERT INTO ${this.#tableName} 
+            INSERT INTO ${this.tableName} 
             (username, password, first_name, last_name, email, role, age) 
             VALUES (?,?,?,?,?,?,?)
         `;
@@ -50,19 +50,19 @@ class UserModel {
     ];
     const result = await dbQuery(sql, params);
     return result?.affectedRows || 0;
-  }
+  };
 
-  async update(params, id) {
+  update = async (params, id) => {
     const { columnSet, values } = multipleColumnSet(params);
-    const sql = `UPDATE ${this.#tableName} SET ${columnSet} WHERE id = ?`;
+    const sql = `UPDATE ${this.tableName} SET ${columnSet} WHERE id = ?`;
     return await dbQuery(sql, [...values, id]);
-  }
+  };
 
-  async delete(id) {
-    const sql = `DELETE FROM ${this.#tableName} WHERE id = ?`;
+  delete = async (id) => {
+    const sql = `DELETE FROM ${this.tableName} WHERE id = ?`;
     const result = await dbQuery(sql, [id]);
     return result?.affectedRows || 0;
-  }
+  };
 }
 
 export default new UserModel();
