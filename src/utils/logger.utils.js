@@ -1,4 +1,4 @@
-const { createLogger, format, transports } = require('winston');
+import { createLogger, format, transports } from 'winston';
 
 const consoleFormat = format.combine(
   format.colorize(),
@@ -19,4 +19,4 @@ const logger = createLogger({
   ],
 });
 
-module.exports = logger;
+export default logger;

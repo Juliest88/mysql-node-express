@@ -1,5 +1,5 @@
-const HttpException = require("./HttpException.utils");
-const UserModel = require("../models/user.model");
+import UserModel from "../models/user.model.js";
+import HttpException from "./HttpException.utils.js";
 
 /** Extract the bearer token from the authorization header */
 function extractBearer(authHeader = "") {
@@ -31,4 +31,4 @@ function checkPermissions(user, requestedId, roles = []) {
   }
 }
 
-module.exports = { extractBearer, loadUser, checkPermissions };
+export { checkPermissions, extractBearer, loadUser };

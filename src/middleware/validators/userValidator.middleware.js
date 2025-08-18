@@ -1,8 +1,7 @@
-const { body } = require('express-validator');
-const Role = require('../../utils/userRoles.utils');
+import { body } from 'express-validator';
+import Role from '../../utils/userRoles.utils.js';
 
-
-exports.createUserSchema = [
+const createUserSchema = [
     body('username')
         .exists()
         .withMessage('username is required')
@@ -50,7 +49,7 @@ exports.createUserSchema = [
         .withMessage('Must be a number')
 ];
 
-exports.updateUserSchema = [
+const updateUserSchema = [
     body('username')
         .optional()
         .isLength({ min: 3 })
@@ -106,7 +105,7 @@ exports.updateUserSchema = [
         .withMessage('Invalid updates!')
 ];
 
-exports.validateLogin = [
+const validateLogin = [
     body('email')
         .exists()
         .withMessage('Email is required')
@@ -119,3 +118,5 @@ exports.validateLogin = [
         .notEmpty()
         .withMessage('Password must be filled')
 ];
+
+export { createUserSchema, updateUserSchema, validateLogin };

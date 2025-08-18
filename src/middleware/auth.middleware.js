@@ -1,10 +1,6 @@
-const jwt = require("jsonwebtoken");
-const config = require("../config");
-const {
-  extractBearer,
-  loadUser,
-  checkPermissions,
-} = require("../utils/auth.utils");
+import jwt from "jsonwebtoken";
+import config from "../config/index.js";
+import { checkPermissions, extractBearer, loadUser } from "../utils/auth.utils.js";
 
 /**
  * Middleware to check if the user is authenticated and has the required roles
@@ -38,4 +34,4 @@ const auth = (...roles) => {
   };
 };
 
-module.exports = auth;
+export default auth;

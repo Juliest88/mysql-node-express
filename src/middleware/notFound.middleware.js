@@ -1,5 +1,7 @@
-const HttpException = require('../utils/HttpException.utils');
+import HttpException from '../utils/HttpException.utils.js';
 
-module.exports = (req, res, next) => {
+const notFoundMiddleware = (req, res, next) => {
   next(new HttpException(404, 'Endpoint Not Found'));
 };
+
+export default notFoundMiddleware;

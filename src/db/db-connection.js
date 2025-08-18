@@ -1,15 +1,13 @@
-const mysql2 = require('mysql2');
-const config = require('../config');
-const logger = require('../utils/logger.utils');
-const { db } = require('../config');
+import mysql2 from 'mysql2';
+import config from '../config/index.js';
+import logger from '../utils/logger.utils.js';
+const { db } = config;
 
 class DBConnection {
     constructor() {
         this.db = mysql2.createPool(db);
-
         this.checkConnection();
     }
-
     checkConnection() {
         this.db.getConnection((err, connection) => {
             if (err) {
@@ -29,7 +27,6 @@ class DBConnection {
             return
         });
     }
-
     query = async (sql, values) => {
         return new Promise((resolve, reject) => {
             const callback = (error, result) => {
@@ -45,7 +42,6 @@ class DBConnection {
             const mysqlErrorList = Object.keys(HttpStatusCodes);
             // convert mysql errors which in the mysqlErrorList list to http status code
             err.status = mysqlErrorList.includes(err.code) ? HttpStatusCodes[err.code] : err.status;
-
             throw err;
         });
     }
@@ -57,5 +53,5 @@ const HttpStatusCodes = Object.freeze({
     ER_DUP_ENTRY: 409
 });
 
-
-module.exports = new DBConnection().query;
+const dbQuery = new DBConnection().query;
+export default dbQuery;

@@ -1,8 +1,8 @@
-const dotenv = require('dotenv');
+import dotenv from 'dotenv';
 // Init environment variables
 dotenv.config();
 
-module.exports = {
+const config = {
   port: process.env.PORT || 3331,
   db: {
     host: process.env.DB_HOST,
@@ -16,3 +16,5 @@ module.exports = {
     algorithm: process.env.JWT_ALGORITHM || 'HS256',
   },
 };
+
+export default config;

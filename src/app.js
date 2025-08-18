@@ -1,14 +1,14 @@
-// Third-party dependencies
-const express = require("express");
-const swaggerUi = require('swagger-ui-express');
-const YAML = require('yamljs');
-const swaggerDocument = YAML.load(__dirname + '/config/swagger.yaml');
+import express from "express";
+import swaggerUi from "swagger-ui-express";
+import YAML from "yamljs";
+import errorMiddleware from "./middleware/error.middleware.js";
+import notFound from "./middleware/notFound.middleware.js";
+import applySecurity from "./middleware/security.js";
+import router from "./routes/index.js";
 
-// Internal dependencies
-const applySecurity = require('./middleware/security');
-const router = require('./routes/index');
-const notFound = require('./middleware/notFound.middleware');
-const errorMiddleware = require('./middleware/error.middleware');
+const swaggerDocument = YAML.load(
+  new URL("./config/swagger.yaml", import.meta.url)
+);
 
 // Init express app
 const app = express();
@@ -21,10 +21,10 @@ app.use(express.json());
 applySecurity(app);
 
 // Main router
-app.use('/api/v1', router);
+app.use("/api/v1", router);
 
 // Swagger UI
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // 404 error
 app.use(notFound);
@@ -32,4 +32,4 @@ app.use(notFound);
 // Error middleware
 app.use(errorMiddleware);
 
-module.exports = app;
+export default app;

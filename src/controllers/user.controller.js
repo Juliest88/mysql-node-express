@@ -1,9 +1,9 @@
-const UserModel = require("../models/user.model");
-const HttpException = require("../utils/HttpException.utils");
-const { validationResult } = require("express-validator");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const config = require("../config");
+import bcrypt from "bcryptjs";
+import { validationResult } from "express-validator";
+import jwt from "jsonwebtoken";
+import config from "../config/index.js";
+import UserModel from "../models/user.model.js";
+import HttpException from "../utils/HttpException.utils.js";
 
 /******************************************************************************
  *                              User Controller
@@ -146,4 +146,5 @@ class UserController {
 /******************************************************************************
  *                               Export
  ******************************************************************************/
-module.exports = new UserController();
+const userController = new UserController();
+export default userController;

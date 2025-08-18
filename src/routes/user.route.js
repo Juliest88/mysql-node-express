@@ -1,12 +1,11 @@
-const express = require('express');
+import express from 'express';
+import userController from '../controllers/user.controller.js';
+import auth from '../middleware/auth.middleware.js';
+import awaitHandlerFactory from '../middleware/awaitHandlerFactory.middleware.js';
+import { createUserSchema, updateUserSchema, validateLogin } from '../middleware/validators/userValidator.middleware.js';
+import Role from '../utils/userRoles.utils.js';
+
 const router = express.Router();
-const userController = require('../controllers/user.controller');
-const auth = require('../middleware/auth.middleware');
-const Role = require('../utils/userRoles.utils');
-const awaitHandlerFactory = require('../middleware/awaitHandlerFactory.middleware');
-
-const { createUserSchema, updateUserSchema, validateLogin } = require('../middleware/validators/userValidator.middleware');
-
 
 router.get('/', auth(), awaitHandlerFactory(userController.getAllUsers)); // localhost:3000/api/v1/users
 
@@ -24,4 +23,4 @@ router.delete('/id/:id', auth(Role.Admin), awaitHandlerFactory(userController.de
 
 router.post('/login', validateLogin, awaitHandlerFactory(userController.userLogin)); // localhost:3000/api/v1/users/login
 
-module.exports = router;
+export default router;

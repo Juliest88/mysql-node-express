@@ -1,9 +1,9 @@
-const helmet = require("helmet");
-const hpp = require("hpp");
-const cors = require("cors");
-const rateLimit = require("express-rate-limit");
+import helmet from "helmet";
+import hpp from "hpp";
+import cors from "cors";
+import rateLimit from "express-rate-limit";
 
-module.exports = function applySecurity(app) {
+function applySecurity(app) {
   app.use(helmet()); // Security headers
   app.use(hpp()); // Prevent HTTP Parameter Pollution
 
@@ -21,4 +21,6 @@ module.exports = function applySecurity(app) {
   app.use(cors());
   // Enable pre-flight
   app.options("*", cors());
-};
+}
+
+export default applySecurity;

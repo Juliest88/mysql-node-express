@@ -1,4 +1,4 @@
-const logger = require('../utils/logger.utils');
+import logger from '../utils/logger.utils.js';
 
 function errorMiddleware(error, req, res, next) {
     let { status = 500, message, data } = error;
@@ -18,7 +18,7 @@ function errorMiddleware(error, req, res, next) {
     res.status(status).send(error);
 }
 
-module.exports = errorMiddleware;
+export default errorMiddleware;
 /*
 {
     type: 'error',
