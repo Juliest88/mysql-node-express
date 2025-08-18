@@ -1,52 +1,68 @@
-import { dbQuery } from '../db/index.js';
-import { multipleColumnSet } from '../utils/common.utils.js';
-import Role from '../utils/userRoles.utils.js';
+import { dbQuery } from "../db/index.js";
+import { multipleColumnSet } from "../utils/common.utils.js";
+import Role from "../utils/userRoles.utils.js";
 
 class UserModel {
-    tableName = 'user';
+  #tableName = "user";
 
-    find = async (params = {}) => {
-        let sql = `SELECT * FROM ${this.tableName}`;
-        if (!Object.keys(params).length) {
-            return await dbQuery(sql);
-        }
-        const { columnSet, values } = multipleColumnSet(params)
-        sql += ` WHERE ${columnSet}`;
-        return await dbQuery(sql, [...values]);
+  async find(params = {}) {
+    let sql = `SELECT * FROM ${this.#tableName}`;
+
+    if (!Object.keys(params).length) {
+      return await dbQuery(sql);
     }
 
-    findOne = async (params) => {
-        const { columnSet, values } = multipleColumnSet(params)
-        const sql = `SELECT * FROM ${this.tableName}
-        WHERE ${columnSet}`;
-        const result = await dbQuery(sql, [...values]);
-        // return back the first row (user)
-        return result[0];
-    }
+    const { columnSet, values } = multipleColumnSet(params);
+    sql += ` WHERE ${columnSet}`;
 
-    create = async ({ username, password, first_name, last_name, email, role = Role.SuperUser, age = 0 }) => {
-        const sql = `INSERT INTO ${this.tableName}
-        (username, password, first_name, last_name, email, role, age) VALUES (?,?,?,?,?,?,?)`;
-        const result = await dbQuery(sql, [username, password, first_name, last_name, email, role, age]);
-        const affectedRows = result ? result.affectedRows : 0;
-        return affectedRows;
-    }
+    return await dbQuery(sql, values);
+  }
 
-    update = async (params, id) => {
-        const { columnSet, values } = multipleColumnSet(params)
-        const sql = `UPDATE user SET ${columnSet} WHERE id = ?`;
-        const result = await dbQuery(sql, [...values, id]);
-        return result;
-    }
+  async findOne(params) {
+    const { columnSet, values } = multipleColumnSet(params);
+    const sql = `SELECT * FROM ${this.#tableName} WHERE ${columnSet}`;
+    const [result] = await dbQuery(sql, values);
+    return result;
+  }
 
-    delete = async (id) => {
-        const sql = `DELETE FROM ${this.tableName}
-        WHERE id = ?`;
-        const result = await dbQuery(sql, [id]);
-        const affectedRows = result ? result.affectedRows : 0;
-        return affectedRows;
-    }
+  async create({
+    username,
+    password,
+    first_name,
+    last_name,
+    email,
+    role = Role.SuperUser,
+    age = 0,
+  }) {
+    const sql = `
+            INSERT INTO ${this.#tableName} 
+            (username, password, first_name, last_name, email, role, age) 
+            VALUES (?,?,?,?,?,?,?)
+        `;
+    const params = [
+      username,
+      password,
+      first_name,
+      last_name,
+      email,
+      role,
+      age,
+    ];
+    const result = await dbQuery(sql, params);
+    return result?.affectedRows || 0;
+  }
+
+  async update(params, id) {
+    const { columnSet, values } = multipleColumnSet(params);
+    const sql = `UPDATE ${this.#tableName} SET ${columnSet} WHERE id = ?`;
+    return await dbQuery(sql, [...values, id]);
+  }
+
+  async delete(id) {
+    const sql = `DELETE FROM ${this.#tableName} WHERE id = ?`;
+    const result = await dbQuery(sql, [id]);
+    return result?.affectedRows || 0;
+  }
 }
 
-const userModel = new UserModel();
-export default userModel;
+export default new UserModel();
