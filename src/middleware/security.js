@@ -19,8 +19,9 @@ function applySecurity(app) {
   // CORS
   // enabling cors for all requests by using cors middleware
   app.use(cors());
+  // TODO: Check if this is needed
   // Enable pre-flight
-  app.options("*", cors());
+  // app.options("*", cors());
 }
 
 export default applySecurity;
